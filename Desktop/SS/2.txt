@@ -1,0 +1,48 @@
+LEX PART
+%{
+#include "y.tab.h"
+%}
+%%
+a {return A;}
+b {return B;}
+\n {return 0;}
+.   {return yytext[0];}
+%%
+
+YACC PART
+%{
+#include <stdio.h>
+int aCount=0,n;
+%}
+%token A
+%token B
+%%
+s : X B {   if (aCount<n || aCount>n) 
+	    {
+             	YYFAIL();
+                 }
+            }
+X : X T | T
+T : A { aCount++;} 
+  ;
+%%
+
+int main()
+{	printf("Enter the value of n \n");
+            scanf("%d",&n);
+	printf("Enter the String\n");
+	yyparse();
+	printf("Valid String\n");
+}
+
+int YYFAIL()
+{
+	printf("Invalid Count of 'a’\n");
+	exit(0);
+}
+
+int yyerror()
+{
+	printf("Invalid String\n");
+	exit(0);
+}
